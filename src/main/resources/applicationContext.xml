@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context-3.1.xsd">
+
+    <import resource="application-yun.xml"/>
+    <context:annotation-config/>
+    <!--开启组件自动扫描,扫描路径由base-package属性指定，表示Spring将会扫描该目录以及子目录下所有被
+    @Repository、@Service 和 @Controller 和 @Component四个注解修饰的类，对它们进行装配-->
+    <context:component-scan base-package="com.jnshu.*"/>
+
+    <!-- 加载数据库配置文件-->
+    <context:property-placeholder location="classpath:db.properties"/>
+
+    <!-- 数据库连接池 -->
+    <bean id="datasource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+        <property name="username" value="${jdbc.username}"/>
+        <property name="password" value="${jdbc.password}"/>
+        <property name="url" value="${jdbc.url}"/>
+        <property name="driverClassName" value="${jdbc.driver}"/>
+        <!--最大连接数20-->
+        <property name="maxActive" value="20"/>
+        <!--最长等待时间180S-->
+        <property name="maxWait" value="180"/>
+        <!--最大空闲连接数为5-->
+        <property name="maxIdle" value="5"/>
+    </bean>
+
+    <!--让spring管理sqlSessionFactory spring和Mybatis整合-->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <!--注入数据库连接池-->
+        <property name="dataSource" ref="datasource"/>
+        <!-- 加载mybatis的全局配置文件 -->
+        <property name="configLocation" value="classpath:sqlConfig.xml"/>
+
+    </bean>
+
+    <!-- 自动扫描 将Mapper接口生成代理注入到Spring
+   对于在basePackage设置的包（包括子包）下的接口类， 如果接口类的全类名在Mapper.xml文件中和定义过命名空间一致，
+   将被转换成spring的BEAN，在调用的地方通过@Autowired方式将可以注入接口实例-->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="com.jnshu.mapper"/>
+        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>
+    </bean>
+    <import resource="spring-memcached.xml"/>
+
+</beans>

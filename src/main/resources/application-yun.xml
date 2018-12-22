@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--suppress ALL -->
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+    <!-- 文件上传 -->
+    <!-- 配置multipart类型解析器 文件上传 -->
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <!-- 设置上传文件的最大尺寸为5MB -->
+        <property name="maxUploadSize">
+            <value>5242880</value>
+        </property>
+    </bean>
+
+    <!-- 容联短信 SDK -->
+    <bean id="smsSdk" class="com.jnshu.API.SmsSdk">
+       <constructor-arg name="accountSid" value="8aaf07086772ac61016772cbb2460039"/>
+        <constructor-arg name="accountToken" value="050f55d9ab6f44eb8cf797c74405a892"/>
+        <constructor-arg name="appId" value="8aaf07086772ac61016772cbb2c30040"/>
+    </bean>
+
+    <!-- SendCloudMail SDK -->
+    <bean id="mailSdk" class="com.jnshu.API.MailSdk">
+        <constructor-arg name="apiUser" value="wtc666_test_vhHnHA"/>
+        <constructor-arg name="apiKey" value="jGtKuSW08y9czp7W"/>
+        <constructor-arg name="apiUrl" value="http://api.sendcloud.net/apiv2/mail/send" />
+    </bean>
+
+    <bean id="qnYun" class="com.jnshu.API.QnYun">
+        <constructor-arg name="endpoint" value="zone0"/>
+        <constructor-arg name="accessKeyId" value="X3rkE9uHxCvWqJW_fmFh0ZxnBxiMyPAhmGZvmuXp"/>
+        <constructor-arg name="accessKeySecret" value="kfcNkA0Frb5KYWqT-pTMW0zYLMIYJQ1vOmcQ20uA"/>
+        <constructor-arg name="bucketname" value="wtc666"/>
+        <constructor-arg name="fileUrl" value="http://pjjxtg1q7.bkt.clouddn.com"/>
+    </bean>
+    <bean id="aliSdk" class="com.jnshu.API.AliSdk">
+        <constructor-arg name="endpoint" value="http://oss-cn-beijing.aliyuncs.com"/>
+        <constructor-arg name="accessKeyId" value="LTAIKopM3BlbCJsX"/>
+        <constructor-arg name="accessKeySecret" value="hE8lLRm6kkINdtxKUYCfU43EeAxYDk"/>
+        <constructor-arg name="bucketName" value="wtc666"/>
+        <constructor-arg name="fileUrl" value="http://oss-cn-beijing.aliyuncs.com"/>
+    </bean>
+    <bean id="sdkTools" class="com.jnshu.tool.SdkTools"/>
+
+</beans>
